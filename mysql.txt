@@ -1,0 +1,52 @@
+CREATE DATABASE IMDB;
+USE IMDB;
+
+
+--> Movie table creation
+CREATE TABLE movies (movie_id INT AUTO_INCREMENT PRIMARY KEY, title VARCHAR(255) NOT NULL, release_date DATE, description TEXT);
+
+--> Media table creation
+CREATE TABLE media (media_id INT AUTO_INCREMENT PRIMARY KEY, movie_id INT, media_type ENUM('image', 'video') NOT NULL, url VARCHAR(255) NOT NULL, FOREIGN KEY (movie_id) REFERENCES movies(movie_id));
+
+--> Genres table creation
+CREATE TABLE genres (genre_id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL);
+
+--> Movie-genre table creation
+CREATE TABLE movie_genre (movie_id INT, genre_id INT, PRIMARY KEY (movie_id, genre_id), FOREIGN KEY (movie_id) REFERENCES movies(movie_id), FOREIGN KEY (genre_id) REFERENCES genres(genre_id));
+
+--> Review table creation
+CREATE TABLE reviews (review_id INT AUTO_INCREMENT PRIMARY KEY, movie_id INT, user_id INT, rating DECIMAL(3, 1) NOT NULL, comment TEXT, FOREIGN KEY (movie_id) REFERENCES movies(movie_id), FOREIGN KEY (user_id) REFERENCES users(user_id));
+
+--> User table creation
+CREATE TABLE users (user_id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL);
+
+--> Artist table creation
+CREATE TABLE artists (artist_id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL);
+
+--> Artist role table creation
+CREATE TABLE artist_roles (artist_id INT, movie_id INT, role VARCHAR(255) NOT NULL, PRIMARY KEY (artist_id, movie_id), FOREIGN KEY (artist_id) REFERENCES artists(artist_id), FOREIGN KEY (movie_id) REFERENCES movies(movie_id));
+
+
+--> Inserting data for movie table
+INSERT INTO movies(title, release_date, description) VALUES ('Nayakan', '1987-10-21', 'A common man struggles against a corrupt police force put him on the wrong side of the law. He becomes a don, who is loved and respected by many, but his growing power and influence exact a heavy toll.'), ('Soorarai Pottru', '2020-11-12', 'Nedumaaran Rajangam "Maara" sets out to make the common man fly and in the process takes on the world most capital intensive industry and several enemies who stand in his way.');
+
+--> Inserting data for media table
+INSERT INTO media (movie_id, media_type, url) VALUES (1, 'image', ' https://images.app.goo.gl/b7GFfxyjgdMT23AX6'), (1, 'video', 'https://youtu.be/1S6YkmYvgi8?feature=shared'), (2, 'image', 'https://images.app.goo.gl/zgcnPXB9z9trudWz9'), (2, 'video', 'https://youtu.be/fa_DIwRsa9o?feature=shared');
+
+--> Inserting data for genres table
+INSERT INTO genres (name) VALUES ('Action'), ('Drama'), ('Comedy');
+
+--> Inserting data for movie-genre table
+INSERT INTO movie_genre (movie_id, genre_id) VALUES (1, 1), (1, 2), (2, 2), (2, 3);
+
+--> Inserting data for user table
+INSERT INTO users (username, email) VALUES ('suresh', 'top10suresh@movierevieser.com'), ('arun', 'filmicraftarun@movierevieser.com');
+
+--> Inserting data for review table
+INSERT INTO reviews (movie_id, user_id, rating, comment) VALUES (1, 1, 4.9, 'Unbelievable!'), (2, 2, 4.5, 'unstoppable');
+
+--> Inserting data for artist table
+INSERT INTO artists (actor_name, director_name) VALUES ('kamal hasan', 'mani rathnam'), ('surya', 'sudha');
+
+--> Insert sample data for artist roles in movies
+INSERT INTO artist_roles (artist_id, movie_id, role) VALUES (1, 1, 'Lead Actor'), (2, 2, 'lead actor');
